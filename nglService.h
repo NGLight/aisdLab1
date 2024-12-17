@@ -17,7 +17,7 @@ void showCursor(bool cursor){
 int tmp_1 = 1;
 int tmp_2 = 200;
 
-//Возмоно мы добавим анимацию позднее, пока эт озаглушка
+//Возмоно мы добавим анимацию позднее, пока это заглушка
 void loadingAnim(int tmp_1){
     CN;
     tmp_1++;

@@ -15,6 +15,7 @@ using namespace std;
 void createArray(int *arr, int count_elements, short type_array);
 void reverseArray(int *arr, int n);
 void runSortingTest(ofstream &fout, int arraySize, int type_array);
+void runTestOnArraySize();
 void runTestOnArrayType();
 
 enum type_array{RANDOM, SORTED, HALF_SORTED, REVERSED, COUNT_TYPE};
@@ -25,6 +26,7 @@ enum sorting{BUBBLE_SORT, SELECT_SORT, INSERT_SORT, MERGE_SORT, QUICK_SORT,
 
 int main(){
     showCursor(false);
+    runTestOnArraySize();
     runTestOnArrayType();
 }
 
@@ -37,14 +39,15 @@ void runTestOnArraySize(){
     fout << "This is a test of the dependence of time on the size of the array" << endl;
     for (int curSize=0; curSize < COUNT_SIZE; curSize++){
         switch(curSize){
-            case SIZE_01: arraySize = 1000; break;
+            case SIZE_01: arraySize = 100; break;
             case SIZE_02: arraySize = 5000; break;
             case SIZE_03: arraySize = 10000; break;
             case SIZE_04: arraySize = 50000; break;
             case SIZE_05: arraySize = 100000; break;
-            case SIZE_06: arraySize = 200000; break;
-            case SIZE_07: arraySize = 250000; break;
+            case SIZE_06: arraySize = 250000; break;
+            case SIZE_07: arraySize = 500000; break;
         };
+        YL;
         cout << "__________________________________________________________" << endl;
         fout << "__________________________________________________________ " << endl;
 
@@ -58,7 +61,7 @@ void runTestOnArraySize(){
 
 //Тест второй, зависимость времени от типа массива (случайный, наполовину сортированный, развернутый)
 void runTestOnArrayType(){
-    int arraySize = 100000;
+    int arraySize = 250000;
     string nameOfType{};
     ofstream fout("output_aray_type.txt");
     cout << "This is a check of the dependence of time on the type of array" << endl;
@@ -71,7 +74,7 @@ void runTestOnArrayType(){
             case HALF_SORTED: nameOfType = {"Half-sorted array type"}; break;
             case REVERSED: nameOfType = {"Reversed array type"}; break;
         };
-
+        YL;
         cout << nameOfType << endl;
         fout << nameOfType << endl;
 
@@ -115,8 +118,9 @@ void runSortingTest(ofstream &fout, int arraySize, int type_array){
             timeSorting = double(t1 - t0) / CLOCKS_PER_SEC * 1000;
 
             middleTime += timeSorting;
-
+            RD;
             if (curPass == 0){cout << nameSorting << endl; fout << nameSorting << endl;}
+            CN;
             if (COUNT_PASS > 1) cout << "Pass "<< curPass + 1<< "|" << COUNT_PASS << "\r";
             /*
             if (COUNT_PASS > 1){
@@ -126,15 +130,16 @@ void runSortingTest(ofstream &fout, int arraySize, int type_array){
                  << "\t\t" << "Time of sorting: " << timeSorting << " sec" << endl;
             */
             }
-            cout << endl;
+            CN;
+
             middleTime /= COUNT_PASS;
-            if (middleTime < 10000) {
-                cout << "Middle time: " << middleTime << "ms" << '\n' <<endl;
-                fout << "Middle time: " << middleTime << "ms" << '\n' << endl;
+            if (middleTime > 1000) {
+                cout << "Middle time: " << middleTime/1000 << " sec" << '\n' <<endl;
+                fout << "Middle time: " << middleTime/1000 << " sec" << '\n' << endl;
             }
             else {
-                cout << "Middle time: " << middleTime/1000 << "sec" << '\n' <<endl;
-                fout << "Middle time: " << middleTime/1000 << "sec" << '\n' << endl;
+                cout << "Middle time: " << middleTime << " ms" << '\n' <<endl;
+                fout << "Middle time: " << middleTime << " ms" << '\n' << endl;
             }
         }
 }
