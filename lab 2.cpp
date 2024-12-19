@@ -1,3 +1,7 @@
+/*
+    заменить среднее на лучшее
+*/
+
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -29,7 +33,7 @@ int main(){
 //____________________ ФУНКЦИИ ПО ТЕСТИРОВАНИЮ СОРТИРОВОК ____________________//
 //общая функция по тестированию
 void runSortingTests(){
-    for (int typeSorting=0; typeSorting < COUNT_SORTS; typeSorting++){
+    for (int typeSorting=3; typeSorting < COUNT_SORTS; typeSorting++){
         string nameSorting{};
         switch(typeSorting){
                 case(BUBBLE_SORT): nameSorting = {"Bubble sorting"}; break;
@@ -71,7 +75,7 @@ void runSortingTests(){
                 int arraySize{};
                 double middleTime{};
                 switch(curSize){
-                    case SIZE_01: arraySize = 1000; break;
+                    case SIZE_01: arraySize = 2500; break;
                     case SIZE_02: arraySize = 5000; break;
                     case SIZE_03: arraySize = 10000; break;
                     case SIZE_04: arraySize = 50000; break;
@@ -85,8 +89,8 @@ void runSortingTests(){
 
 
                 for (int curPass=0; curPass < COUNT_PASS; curPass++){
-                    middleTime += runSorting(arr, typeSorting, arraySize);
                     cout << "Pass "<< curPass + 1<< "|" << COUNT_PASS << "\r";
+                    middleTime += runSorting(arr, typeSorting, arraySize);
                 }
                 middleTime /= COUNT_PASS;
 
@@ -95,10 +99,10 @@ void runSortingTests(){
                 cout << "Size:" << arraySize << "\t";
                 CN;
                 if (middleTime > 1000)
-                    cout << "time: " << fixed <<  middleTime/1000 << " sec" << endl;
+                    cout << "middle time: " << fixed << middleTime/1000 << " sec" << endl;
                 else
-                    cout << "time: " << fixed <<  middleTime << " ms" << endl;
-                fout << middleTime << endl;
+                    cout << "middle time: " << fixed << middleTime << " ms" << endl;
+                fout << fixed << middleTime << endl;
             }
         }
         fout.close();
@@ -130,7 +134,8 @@ double runSorting(int *arr, int typeSorting, int n){
 //____________________ СОЗДАНИЕ ТЕСТОВЫХ МАССИВОВ ____________________//
 
 void createArray(int *arr, int count_elements, short typeArray){
-    for (int i=0; i < count_elements; arr[i++] = nglRandom(-1000,1000));
+    int a = nglRandom(1000,500);
+    for (int i=0; i < count_elements; arr[i++] = nglRandom(-a,a));
     switch(typeArray){
         case SORTED: heapSort_2(arr, count_elements); break;
         case HALF_SORTED: heapSort_2(arr, count_elements/2);break;

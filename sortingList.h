@@ -176,7 +176,7 @@ void heapify(int arr[], int n, int i) {
 }
 
 
-//__________ ÅÙÅ ÐÀÇÎÊ ÏÈÐÀÌÅÄÀËÜÍÀß __________//
+//__________ ÅÙÅ ÐÀÇÎÊ ÏÈÐÀÌÈÄÀËÜÍÀß __________//
 void heapSort_2(int *arr, int n) {
     for (int i = n / 2 - 1; i >= 0; i--)
         heapify_2(arr, n, i);

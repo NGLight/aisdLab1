@@ -1,32 +1,6 @@
 Random array type
-0
-0
-0
-1
-0
-1
-0
-Sorted array type
-0
-0
-0
-0
-0
-1.6
-0.5
-Half-sorted array type
-0
-0
-0
-0
-1
-0
-1.6
-Reversed array type
-0
-0
-0
-0
-0
-1
-1
+2.000000
+2.900000
+6.000000
+32.100000
+148.200000
