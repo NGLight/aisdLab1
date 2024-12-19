@@ -1,0 +1,32 @@
+Random array type
+0
+0
+0
+0
+0
+0
+0
+Sorted array type
+0
+0
+0
+0
+0
+0
+0
+Half-sorted array type
+0
+0
+0
+0
+1
+0
+0
+Reversed array type
+0
+0
+0
+0
+0
+0
+0

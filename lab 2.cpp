@@ -12,143 +12,126 @@
 
 using namespace std;
 
-void createArray(int *arr, int count_elements, short type_array);
-void reverseArray(int *arr, int n);
-void runSortingTest(ofstream &fout, int arraySize, int type_array);
-void runTestOnArraySize();
-void runTestOnArrayType();
+void runSortingTests();
+double runSorting(int *arr, int typeSorting, int arraySize);
+void createArray(int *arr, int count_elements, short typeArray);
 
 enum type_array{RANDOM, SORTED, HALF_SORTED, REVERSED, COUNT_TYPE};
-enum arraySize{SIZE_01, SIZE_02, SIZE_03, SIZE_04, SIZE_05, SIZE_06, SIZE_07, COUNT_SIZE};
-enum sorting{BUBBLE_SORT, SELECT_SORT, INSERT_SORT, MERGE_SORT, QUICK_SORT,
+enum array_size{SIZE_01, SIZE_02, SIZE_03, SIZE_04, SIZE_05, SIZE_06, SIZE_07, COUNT_SIZE};
+enum sorting_type{BUBBLE_SORT, SELECT_SORT, INSERT_SORT, MERGE_SORT, QUICK_SORT,
             HEAP_SORT, TIM_SORT, INTRO_SORT, SHELL_SORT_2, SHELL_SORT_4, SHELL_SORT_8, COUNT_SORTS};
-
 
 int main(){
     showCursor(false);
-    runTestOnArraySize();
-    runTestOnArrayType();
+    runSortingTests();
 }
 
 //____________________ ФУНКЦИИ ПО ТЕСТИРОВАНИЮ СОРТИРОВОК ____________________//
-//Тест первый, зависимость времени от количества элементов
-void runTestOnArraySize(){
-    int arraySize{};
-    ofstream fout("output_aray_size.txt");
-    cout << "This is a test of the dependence of time on the size of the array" << endl;
-    fout << "This is a test of the dependence of time on the size of the array" << endl;
-    for (int curSize=0; curSize < COUNT_SIZE; curSize++){
-        switch(curSize){
-            case SIZE_01: arraySize = 100; break;
-            case SIZE_02: arraySize = 5000; break;
-            case SIZE_03: arraySize = 10000; break;
-            case SIZE_04: arraySize = 50000; break;
-            case SIZE_05: arraySize = 100000; break;
-            case SIZE_06: arraySize = 250000; break;
-            case SIZE_07: arraySize = 500000; break;
-        };
-        YL;
-        cout << "__________________________________________________________" << endl;
-        fout << "__________________________________________________________ " << endl;
-
-        cout << "Count array elements: " << arraySize << endl;
-        fout << "Count array elements: " << arraySize << endl;
-
-        runSortingTest(fout, arraySize, RANDOM);
-    }
-    fout.close();
-}
-
-//Тест второй, зависимость времени от типа массива (случайный, наполовину сортированный, развернутый)
-void runTestOnArrayType(){
-    int arraySize = 250000;
-    string nameOfType{};
-    ofstream fout("output_aray_type.txt");
-    cout << "This is a check of the dependence of time on the type of array" << endl;
-    fout << "This is a check of the dependence of time on the type of array" << endl;
-
-    for (int curType=0; curType < COUNT_TYPE; curType++){
-        switch(curType){
-            case RANDOM: nameOfType = {"Random array type"}; break;
-            case SORTED: nameOfType = {"Sorted array type"}; break;
-            case HALF_SORTED: nameOfType = {"Half-sorted array type"}; break;
-            case REVERSED: nameOfType = {"Reversed array type"}; break;
-        };
-        YL;
-        cout << nameOfType << endl;
-        fout << nameOfType << endl;
-
-        runSortingTest(fout, arraySize, curType);
-
-        cout << "__________________________________________________________" << endl;
-        fout << "__________________________________________________________ " << endl;
-    }
-    fout.close();
-}
-
-//общая функция по тестированию всех типов массивов
-void runSortingTest(ofstream &fout, int arraySize, int type_array){
-
-    for (int curSorting=0; curSorting < COUNT_SORTS; curSorting++){
+//общая функция по тестированию
+void runSortingTests(){
+    for (int typeSorting=0; typeSorting < COUNT_SORTS; typeSorting++){
         string nameSorting{};
-        double middleTime{};
+        switch(typeSorting){
+                case(BUBBLE_SORT): nameSorting = {"Bubble sorting"}; break;
+                case(SELECT_SORT): nameSorting = {"Selection sorting"}; break;
+                case(INSERT_SORT): nameSorting = {"Insertion sorting"}; break;
+                case(MERGE_SORT): nameSorting = {"Merge sorting"}; break;
+                case(QUICK_SORT): nameSorting = {"Quick sorting"};  break;
+                case(HEAP_SORT): nameSorting = {"Heapsort"}; break;
+                case(TIM_SORT): nameSorting = {"Timsorting"}; break;
+                case(INTRO_SORT): nameSorting = {"Introsorting"}; break;
+                case(SHELL_SORT_2): nameSorting = {"Shell sorting gap = n_2"}; break;
+                case(SHELL_SORT_4): nameSorting = {"Shell sorting gap = n_4"}; break;
+                case(SHELL_SORT_8): nameSorting = {"Shell sorting gap = n_8"}; break;
+        }
 
-        int n = arraySize;
-        int arr[arraySize];
-        createArray(arr, n, type_array);
+        string fileName{};
+        fileName = "_" + nameSorting + ".txt";
+        ofstream fout(fileName);
 
-        for (int curPass=0; curPass < COUNT_PASS; curPass++){
-            clock_t t0{}, t1{};
-            double timeSorting{};
-            t0 = clock();
-            switch(curSorting){
-                case(BUBBLE_SORT): nameSorting = {"Bubble sorting"}; bubbleSort(arr, n); t1 = clock(); break;
-                case(SELECT_SORT): nameSorting = {"Selection sorting"}; selectionSort(arr, n); t1 = clock(); break;
-                case(INSERT_SORT): nameSorting = {"Insertion sorting"}; insertionSort(arr, n); t1 = clock(); break;
-                case(MERGE_SORT): nameSorting = {"Merge sorting"}; mergeSort(arr, 0, n-1); t1 = clock(); break;
-                case(QUICK_SORT): nameSorting = {"Quick sorting"}; quickSort(arr, 0, n-1); t1 = clock(); break;
-                case(HEAP_SORT): nameSorting = {"Heapsort"}; heapSort(arr, n); t1 = clock(); break;
-                case(TIM_SORT): nameSorting = {"Timsorting"}; timSort(arr, n); t1 = clock(); break;
-                case(INTRO_SORT): nameSorting = {"Introsorting"}; introSort(arr, n); t1 = clock(); break;
-                case(SHELL_SORT_2): nameSorting = {"Shell sorting gap = n/2"}; shellSort(arr, n, n/2); t1 = clock(); break;
-                case(SHELL_SORT_4): nameSorting = {"Shell sorting gap = n/4"}; shellSort(arr, n, n/4); t1 = clock(); break;
-                case(SHELL_SORT_8): nameSorting = {"Shell sorting gap = n/8"}; shellSort(arr, n, n/8); t1 = clock(); break;
+        YL;
+        cout << "__________________________________________________________" << endl;
+        cout << nameSorting << endl;
+
+
+        for (int typeArray=0; typeArray < COUNT_TYPE; typeArray++){
+            string nameOfType{};
+            switch(typeArray){
+                case RANDOM: nameOfType = {"Random array type"}; break;
+                case SORTED: nameOfType = {"Sorted array type"}; break;
+                case HALF_SORTED: nameOfType = {"Half-sorted array type"}; break;
+                case REVERSED: nameOfType = {"Reversed array type"}; break;
             }
-            //timeSorting = double(t1 - t0) / CLOCKS_PER_SEC;
-            timeSorting = double(t1 - t0) / CLOCKS_PER_SEC * 1000;
 
-            middleTime += timeSorting;
-            RD;
-            if (curPass == 0){cout << nameSorting << endl; fout << nameSorting << endl;}
-            CN;
-            if (COUNT_PASS > 1) cout << "Pass "<< curPass + 1<< "|" << COUNT_PASS << "\r";
-            /*
-            if (COUNT_PASS > 1){
-            cout << "Pass "<< curPass + 1<< "|" << COUNT_PASS
-                 << "\t\t" << "Time of sorting: " << timeSorting << " sec" << endl;
-            fout << "Pass "<< curPass + 1 << "|" << COUNT_PASS
-                 << "\t\t" << "Time of sorting: " << timeSorting << " sec" << endl;
-            */
-            }
-            CN;
+            YL;
+            cout << nameOfType << endl;
+            fout << nameOfType << endl;
 
-            middleTime /= COUNT_PASS;
-            if (middleTime > 1000) {
-                cout << "Middle time: " << middleTime/1000 << " sec" << '\n' <<endl;
-                fout << "Middle time: " << middleTime/1000 << " sec" << '\n' << endl;
-            }
-            else {
-                cout << "Middle time: " << middleTime << " ms" << '\n' <<endl;
-                fout << "Middle time: " << middleTime << " ms" << '\n' << endl;
+            for (int curSize=0; curSize < COUNT_SIZE; curSize++){
+                int arraySize{};
+                double middleTime{};
+                switch(curSize){
+                    case SIZE_01: arraySize = 1000; break;
+                    case SIZE_02: arraySize = 5000; break;
+                    case SIZE_03: arraySize = 10000; break;
+                    case SIZE_04: arraySize = 50000; break;
+                    case SIZE_05: arraySize = 100000; break;
+                    case SIZE_06: arraySize = 150000; break;
+                    case SIZE_07: arraySize = 250000; break;
+                }
+
+                int arr[arraySize];
+                createArray(arr, arraySize, typeArray);
+
+
+                for (int curPass=0; curPass < COUNT_PASS; curPass++){
+                    middleTime += runSorting(arr, typeSorting, arraySize);
+                    cout << "Pass "<< curPass + 1<< "|" << COUNT_PASS << "\r";
+                }
+                middleTime /= COUNT_PASS;
+
+
+                RD;
+                cout << "Size:" << arraySize << "\t";
+                CN;
+                if (middleTime > 1000)
+                    cout << "time: " << fixed <<  middleTime/1000 << " sec" << endl;
+                else
+                    cout << "time: " << fixed <<  middleTime << " ms" << endl;
+                fout << middleTime << endl;
             }
         }
+        fout.close();
+    }
+}
+
+double runSorting(int *arr, int typeSorting, int n){
+    double timeSorting;
+    clock_t t0{}, t1{};
+    t0 = clock();
+        switch(typeSorting){
+        case(BUBBLE_SORT): bubbleSort(arr, n); break;
+        case(SELECT_SORT): selectionSort(arr, n); break;
+        case(INSERT_SORT): insertionSort(arr, n); break;
+        case(MERGE_SORT): mergeSort(arr, 0, n-1); break;
+        case(QUICK_SORT): quickSort(arr, 0, n-1); break;
+        case(HEAP_SORT): heapSort(arr, n); break;
+        case(TIM_SORT): timSort(arr, n); break;
+        case(INTRO_SORT): introSort(arr, n); break;
+        case(SHELL_SORT_2): shellSort(arr, n, n/2); break;
+        case(SHELL_SORT_4): shellSort(arr, n, n/4); break;
+        case(SHELL_SORT_8): shellSort(arr, n, n/8); break;
+    }
+    t1 = clock();
+    timeSorting = double(t1 - t0) / CLOCKS_PER_SEC * 1000;
+    return timeSorting;
 }
 
 //____________________ СОЗДАНИЕ ТЕСТОВЫХ МАССИВОВ ____________________//
 
-void createArray(int *arr, int count_elements, short type_array){
+void createArray(int *arr, int count_elements, short typeArray){
     for (int i=0; i < count_elements; arr[i++] = nglRandom(-1000,1000));
-    switch(type_array){
+    switch(typeArray){
         case SORTED: heapSort_2(arr, count_elements); break;
         case HALF_SORTED: heapSort_2(arr, count_elements/2);break;
         case REVERSED: heapSort_2(arr, count_elements);
